@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+	<title>demo</title>
+	<script type="text/javascript" src="riny.storage.js"></script>
+	<style>
+	html{
+		font-size:calc( 100 / 375 * 100vw );
+		font-size:-webkit-calc( 100 / 375 * 100vw );
+	}
+	body,div,input,button{
+		margin:0;
+		padding:0;
+	}
+	input,button{
+		-webkit-tap-highlight-color: rgba(255,255,255,0);
+		border:none;
+		outline:none;
+	}
+	.wrap{
+		text-align:center;
+		padding-top:10px;
+		font-size:0;
+	}
+	.searchbar{
+		height:.3rem;
+		padding:5px .5rem;
+		border-radius:.2rem;
+		border:1px solid #ccc;
+		box-sizing:border-box;
+		-webkit-box-sizing:border-box;
+	}
+	#search{
+		display:block;
+		width:100%;
+		height:100%;
+		font:.16rem/.16rem arial;
+		color:#333;
+	}
+	.btn{
+		background-color:rgba(0,0,0,0);
+		color:#333;
+		width:.5rem;
+		height:.5rem;
+		border:1px solid #ccc;
+		border-radius:50%;
+		margin-top:10px;
+		font-size:.16rem;
+	}
+	.history{
+		word-break:break-all;
+		text-align:left;
+		margin-top:10px;
+	}
+	.history a{
+		display:inline-block;
+		font:.16rem/.2rem arial;
+		padding:.05rem;
+		border:1px solid #ccc;
+		color:#333;
+		border-radius:.2rem;
+		margin:.05rem;
+		max-width:50%;
+		overflow:hidden;
+		text-overflow:ellipsis;
+		white-space:nowrap;
+		box-sizing:border-box;
+		-webkit-box-sizing:border-box;
+	}
+	.cancel{
+		height:.2rem;
+		background-color:#ccc;
+		color:#fff;
+		font:.16rem/.2rem arial;
+		margin-top:10px;
+		padding:5px 0;
+		border-radius:.2rem;
+	}
+	</style>
+</head>
+<body>
+	<div class="wrap">
+		<div class="searchbar">
+			<input type="text" '请输入内容' id="search" placeholder="请输入搜索内容">
+		</div>
+		<button class="btn" id="btn">搜索</button>
+		<div class="history" id="history"></div>
+		<div class="cancel" id="cancel">清除全部记录</div>
+	</div>
+	<script>
+	window.onload=function(){
+
+		function getId(id){
+			document.getElementById(id);
+		};
+
+		var input=getId('search'),btn=getId('btn'),history=getId('history'),cancel=getId('cancel');
+
+		var myStorage=new rinyStorage({
+			storage:'history',
+			limit:10,
+			input:input
+		});
+
+		function check(){
+			var data=myStorage.checkStorage();
+			var html='';
+			if(data){
+				for(var i=0;i<data.length;i++){
+					html+='<a>'+data[i]+'</a>';
+				};
+			};
+			history.innerHTML=html;
+		};
+		check();
+
+		function set(){
+			if(!/\b/.test(input.value)){
+				return;
+			};
+			myStorage.setStorage();
+			check();
+			input.value='';
+		};
+		
+		btn.addEventListener('click',set,false);
+
+		input.addEventListener('keyup',function(e){
+			if(e.keyCode==13){
+				set();
+			};
+		},false);
+
+		cancel.addEventListener('click',function(e){
+			myStorage.cancelStorage();
+			check();
+		},false);
+
+	};
+	</script>
+</body>
+</html>
