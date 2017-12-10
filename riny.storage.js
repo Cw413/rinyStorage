@@ -13,7 +13,9 @@ rinyStorage.prototype.checkStorage=function(){
 };
 rinyStorage.prototype.setStorage=function(){
 
-	this.value=this.input.value;
+	this.value=this.input.value.replace(/(^\s*)|(\s*$)/g,'');
+	this.value=this.value.replace(/</,'&lt;');
+	this.value=this.value.replace(/>/,'&gt;');
 
 	this.checkStorage();
 	var history;
