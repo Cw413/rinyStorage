@@ -117,7 +117,7 @@
 		check();
 
 		function set(){
-			if(!/\b/.test(input.value)){
+			if(/\s/.test(input.value)){
 				return;
 			};
 			myStorage.setStorage();
